@@ -80,10 +80,10 @@
 
       for (var i = 0; i <= numDays; i++) {
            if(keyword == null){
-           var url = "http://content.guardianapis.com/search?from-date=" + currDateAPI + andsign + "to-date=" + currDateAPI + andsign + "api-key=a01c4652-3f29-4ffc-8044-d867dfa7cdb3";
+           var url = "https://content.guardianapis.com/search?from-date=" + currDateAPI + andsign + "to-date=" + currDateAPI + andsign + "api-key=a01c4652-3f29-4ffc-8044-d867dfa7cdb3";
            }
            else{
-            var  url = "http://content.guardianapis.com/search?q=" + keyword + "&from-date=" + currDateAPI + "&to-date=" + currDateAPI + "&api-key=a01c4652-3f29-4ffc-8044-d867dfa7cdb3";
+            var  url = "https://content.guardianapis.com/search?q=" + keyword + "&from-date=" + currDateAPI + "&to-date=" + currDateAPI + "&api-key=a01c4652-3f29-4ffc-8044-d867dfa7cdb3";
            }
 
            console.log(url);
