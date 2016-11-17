@@ -1,3 +1,10 @@
+/*
+  Creates an empty hashmap
+  Loads words to ignore
+  Parses HTML and builds hashmap of word occurences
+  Run method calls all functions needed to parse HTML and return json
+ */
+
 package hello;
 
 import java.io.*;
@@ -141,22 +148,13 @@ public class WordSearch {
 			String text = scraper.getTextFromUrls(urls);                   // parses out text from html returned by web scraper
 			buildMapFromText(text);                                 // creates an ordered hash map from string
 			jsonString = JsonConverter.createJsonStringFromMap(getWordMap(), 15);  // creates jsonArray (as string) from wordMap
-			System.out.println(jsonString);
 		}
 		else
 		{
 			throw new IOException("null string");
-			//System.out.println("Array of urls is null");
-			//return "error";
+
 		}
 		return jsonString;
 	}
 
-//    public static void main(String[] args) throws IOException
-//    {
-//        WordSearch search = new WordSearch();
-//        search.run("nytimes", "jsonInput");
-//        search = new WordSearch();
-//        search.run("guardian", JsonConverter.readFileToString("guardian_response.json"));
-//	}
 }

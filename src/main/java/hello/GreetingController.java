@@ -1,3 +1,9 @@
+/*
+    RESTful API calls that has Java do GET and POST calls
+   /greeting sends the form inputs onto the second API call which gets started on /result and posts to /hello
+ */
+
+
 package hello;
 
 

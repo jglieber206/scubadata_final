@@ -1,3 +1,7 @@
+/*
+    Greeting object. It has all the variables that are being passed through the RESTful API calls
+ */
+
 package hello;
 
 import javax.json.Json;

@@ -1,3 +1,8 @@
+/*
+    Gets URLS from a json object
+    Creates json object from hashmap
+ */
+
 package hello;
 
 import javax.json.Json;
@@ -87,36 +92,5 @@ public class JsonConverter
         }
 
         return urls;
-    }
-
-
-
-    // TODO what do I pass in here lol. Txt? Json? string?
-    // right now it calls getJsonUrlArrayFromNYT which finds the 'Docs' array... Then in another method I pass
-    // the returned array to getStringUrlArrayFromJsonUrlArray(JsonArray j). Which does as it says.
-
-    static String[] readJsonFileToStringArrayNYT() throws IOException {
-        String jsonString = readFileToString("nyt.json");
-        return getStringUrlArrayFromNYT(jsonString);
-    }
-
-    static String[] readJsonFileToStringArrayGuardian() throws IOException {
-        String jsonString = readFileToString("guardian.json");
-        return getStringUrlArrayFromGuardian(jsonString);
-    }
-
-    static String readFileToString(String fileName) throws IOException
-    {
-        String fileToString = "";
-        File file = new File(fileName);
-        FileInputStream fis = new FileInputStream(file);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-        String line = "";
-        while((line = reader.readLine()) != null)
-        {
-            fileToString += line + " ";
-        }
-        reader.close();
-        return fileToString;
     }
 }

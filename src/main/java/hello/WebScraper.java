@@ -1,3 +1,9 @@
+/*
+   	Establishes connection to the URL to be scraped
+   	Loops through URLS and calls jsoup on each URL
+   	Returns only wanted html text
+ */
+
 package hello;
 
 import java.io.IOException;

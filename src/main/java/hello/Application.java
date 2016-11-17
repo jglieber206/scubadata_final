@@ -1,3 +1,7 @@
+/*
+    This runs the application runner. It calls everything through the public static void main method
+ */
+
 package hello;
 
 import org.springframework.boot.SpringApplication;
