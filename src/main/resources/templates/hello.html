@@ -1,0 +1,259 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .bar{
+            fill: #03A9F4;
+        }
+        .bar:hover{
+            fill: #B3E5FC;
+        }
+
+        .axis {
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .axis path,
+        .axis line, .axis text {
+            fill: none;
+            stroke: white;
+            shape-rendering: crispEdges;
+        }
+    </style>
+</head>
+<body>
+<link href="../static/css/myStyle.css"
+      th:href="@{css/myStyle.css}" rel="stylesheet" media="screen"/>
+
+
+<h1>Graphs of Top 15 Occuring Words</h1>
+
+<div class="slideshow-btn"><h2 th:text="${greeting.keyword}"></h2></div>
+
+<div class="w3-content w3-display-container">
+    <div class="mySlides">
+        <div id="bar"></div>
+    </div>
+    <div class="mySlides">
+        <div id="chart" class="chart-container"></div>
+    </div>
+
+    <div class="slideshow-btn">
+        <a class="w3-btn-floating w3-display-left" onclick="plusDivs(-1)">&#10094;</a>
+        <a class="w3-btn-floating w3-display-right" onclick="plusDivs(1)">&#10095;</a>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="http://d3js.org/d3.v3.min.js" th:src="@{http://d3js.org/d3.v3.min.js}"></script>
+
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"
+        th:src="@{http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js}"></script>
+
+<script th:inline="javascript">
+    // dimensions
+    var margin = {top: 25, right: 20, bottom: 50, left: 50},
+            width = 1100- margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+    // ranges
+    var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+    var y = d3.scale.linear().range([height, 0]);
+    // axis
+    var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+    var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(10);
+
+     var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+            return d.word + ": " + d.Freq;
+        });
+
+    var svgBar = d3.select("#bar").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
+
+    svgBar.call(tip);
+
+
+        /*<![CDATA[*/
+
+             var jsonString = /*[[${greeting.content}]]*/ 'Sebastian';
+             console.log(jsonString);
+
+
+        /*]]>*/
+
+
+        var jsonData = JSON.parse(jsonString);
+        console.log(jsonData);
+
+        jsonData.forEach(function(d) {
+            d.word = d.word;
+            d.Freq = +d.Freq;
+        });
+
+        x.domain(jsonData.map(function(d) { return d.word; }));
+        y.domain([0, d3.max(jsonData, function(d) { return d.Freq; })]);
+
+
+    svgBar.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+    svgBar.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end");
+
+
+
+    svgBar.selectAll(".bar")
+            .data(jsonData)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.word); })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d) { return y(d.Freq); })
+            .attr("height", function(d) { return height - y(d.Freq); })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);
+
+
+
+    var data = JSON.parse(jsonString);
+
+
+
+     console.log(data);
+        var pie=d3.layout.pie()
+                .value(function(d){return d.Freq})
+                .sort(null)
+                .padAngle(.03);
+
+        var w=300,h=300;
+
+        var outerRadius=w/2;
+        var innerRadius=100;
+
+        var color = d3.scale.category10();
+
+        var arc=d3.svg.arc()
+                .outerRadius(outerRadius)
+                .innerRadius(innerRadius);
+
+ var tipCircle = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+            return d.data.word + ": " + d.data.Freq;
+        });
+
+        var svgChart =d3.select("#chart")
+                .append("svg")
+                .attr({
+                    width:w,
+                    height:h,
+                    class:'shadow'
+                }).append('g')
+                .attr({
+                    transform:'translate('+w/2+','+h/2+')'
+                });
+
+        var path=svgChart.selectAll('path')
+                .data(pie(data))
+                .enter()
+                .append('path')
+                .attr({
+                    d:arc,
+                    fill:function(d, i){
+                        return color(d.data.word);
+                    }
+                })
+                .on('mouseover', tipCircle.show)
+                .on('mouseout', tipCircle.hide);
+
+        svgChart.call(tipCircle);
+
+        path.transition()
+                .duration(1000)
+                .attrTween('d', function(d) {
+                    var interpolate = d3.interpolate({startAngle: 0, endAngle: 0}, d);
+                    return function(t) {
+                        return arc(interpolate(t));
+                    };
+                });
+
+        var text=svgChart.selectAll('text')
+                .data(pie(data))
+                .enter()
+                .append("text")
+                .transition()
+                .duration(200)
+                .attr("transform", function (d) {
+                    return "translate(" + arc.centroid(d) + ")";
+                })
+                .attr("dy", ".4em")
+                .attr("text-anchor", "middle")
+
+                .style({
+                    fill:'#fff',
+                    'font-size':'10px'
+                });
+
+
+                var slideIndex = 1;
+                showDivs(slideIndex);
+
+                function plusDivs(n) {
+                    showDivs(slideIndex += n);
+                }
+
+                function showDivs(n) {
+                    var i;
+                    var x = document.getElementsByClassName("mySlides");
+
+                    /*<![CDATA[*/
+                    if (n > x.length) {slideIndex = 1}
+                    if (n < 1) {slideIndex = x.length}
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "none";
+                    }
+                    /*]]>*/
+
+                x[slideIndex-1].style.display = "block";
+
+
+
+
+
+
+
+}
+
+
+</script>
+
+<div class="centering"><a class="btn goback" href="/greeting">Submit another message </a></div>
+</body>
+</html>
